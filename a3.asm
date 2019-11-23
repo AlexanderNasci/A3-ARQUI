@@ -5,7 +5,7 @@
 
 ################################## Data segment ##################################
 .data 
-	arreglo: 			.space 0x8 		 # Tamaño arreglo 8*4=32 (se reserva el espacio del framebuffer)
+	arreglo: 			.space 0x8 		 # TamaÃ±o arreglo 8*4=32 (se reserva el espacio del framebuffer)
 	saludo:        			.asciz "Quiz 1. Memoria cache" 
 	mensaje_final: 			.asciz "\n Hola Profe! Resultado: \n "
 	SIZE_ARRAY:			.word 0x8
@@ -50,8 +50,7 @@ submain:
 
 
 SumarArreglo: 
-	beqz s0, resultado	#offset=0 sale del ciclo
-	bge a1, s0, resultado	#i>offset
+	beq a1, s0, for2	#i>offset
 	lw a2, (a6)		#a2=A[i]
 	li a3, 4
 	mul a3, s0, a3
@@ -61,8 +60,13 @@ SumarArreglo:
 	sw a4, (a6)
 	addi a6, a6, 4
 	addi a1, a1, 1
-	div s0, s0, s1		#offset/2
 	j SumarArreglo
+
+for2: 				# cumplio el ciclo for, ahora cambiamos el offset
+	
+	div s0, s0, s1		#offset/2
+	beqz s0, resultado	#offset=0 sale del ciclo
+	add a1 , zero, zero 	#Volvemos a poner la i en cero	
 	
  resultado: 
     li  a7, 4         
